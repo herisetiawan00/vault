@@ -55,7 +55,7 @@ jobs:
       
       # Perform version bump and tagging
       - name: Bump Version and Tag
-        run: cargo release patch --no-dev-version --execute
+        run: cargo release patch --execute
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
