@@ -9,7 +9,10 @@ use crate::utils::{
 pub fn encrypt_file(args: BTreeMap<String, String>) -> () {
     let file_path = match args.get("file") {
         Some(value) => value,
-        None => process::exit(1),
+        None => {
+            println!("Missing required parameter [--file]");
+            process::exit(1)
+        }
     };
     let file_name = get_file_stem_name(file_path.to_string());
 

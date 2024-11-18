@@ -3,8 +3,21 @@ use std::{collections::BTreeMap, fs, process};
 use crate::utils::{bits::bits_to_bytes, encrypt::decryptor, file::read_file_as_bits};
 
 pub fn decrypt_file(args: BTreeMap<String, String>) -> () {
-    let file_path = args.get("file").unwrap();
-    let keys_path = args.get("key").unwrap();
+    let file_path = match args.get("file") {
+        Some(value) => value,
+        None => {
+            println!("Missing required parameter [--file]");
+            process::exit(1)
+        }
+    };
+    let keys_path = match args.get("key") {
+        Some(value) => value,
+        None => {
+            println!("Missing required parameter [--key]");
+            process::exit(1)
+        }
+    };
+
     let output_path = args.get("output");
 
     let file_bits = read_file_as_bits(file_path.to_string());

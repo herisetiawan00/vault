@@ -1,3 +1,5 @@
+use std::process;
+
 use super::key::key_generator;
 
 pub fn encryptor(input: Vec<u8>) -> (Vec<u8>, Vec<u8>) {
@@ -9,7 +11,7 @@ pub fn encryptor(input: Vec<u8>) -> (Vec<u8>, Vec<u8>) {
     while rest.len() > 0 {
         let index = rest.len() % keys.len();
         let position: u8 = keys[index];
-        let value = rest.pop().unwrap();
+        let value = rest.pop().unwrap_or(2);
 
         match position {
             0 => result.insert(0, value),
@@ -29,10 +31,24 @@ pub fn decryptor(input: Vec<u8>, keys: Vec<u8>) -> Vec<u8> {
     while rest.len() > 0 {
         let position = keys[index];
 
-        match position {
-            1 => result.push(rest.pop().unwrap()),
-            0 => result.push(rest.remove(0)),
-            _ => {}
+        let value: Option<u8> = match position {
+            1 => Some(match rest.pop() {
+                Some(value) => value,
+                None => {
+                    println!("Invalid given input data!");
+                    process::exit(1);
+                }
+            }),
+            0 => Some(rest.remove(0)),
+            _ => None,
+        };
+
+        match value {
+            Some(value) => result.push(value),
+            None => {
+                println!("Invalid given input data!");
+                process::exit(1);
+            }
         }
 
         if index == keys.len() - 1 {
