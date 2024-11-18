@@ -24,6 +24,24 @@ pub fn encrypt_file(args: BTreeMap<String, String>) -> () {
     let encrypted_file_path = format!("{}{}.bzf", output_path, file_name);
     let encrypted_keys_path = format!("{}{}.bzk", output_path, file_name);
 
-    write_to_file_recursively(&encrypted_file_path, &encrypted_bytes).unwrap();
-    write_to_file_recursively(&encrypted_keys_path, &keys_bytes).unwrap();
+    match write_to_file_recursively(&encrypted_file_path, &encrypted_bytes) {
+        Ok(_) => println!("Encrypted file stored at {}", encrypted_file_path),
+        Err(e) => {
+            println!(
+                "Failed to store encrypted file at {}: {}",
+                encrypted_file_path, e
+            );
+            process::exit(1);
+        }
+    }
+    match write_to_file_recursively(&encrypted_keys_path, &keys_bytes) {
+        Ok(_) => println!("Key file stored at {}", encrypted_keys_path),
+        Err(e) => {
+            println!(
+                "Key to store encrypted file at {}: {}",
+                encrypted_keys_path, e
+            );
+            process::exit(1);
+        }
+    }
 }

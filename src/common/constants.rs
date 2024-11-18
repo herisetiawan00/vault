@@ -1,8 +1,4 @@
-use std::{collections::BTreeMap, env};
-
-pub fn get_base_directory() -> String {
-    env::var("XDG_CONFIG_HOME").unwrap_or(env::var("HOME").unwrap())
-}
+use std::collections::BTreeMap;
 
 pub fn get_param_prefix() -> String {
     "--".to_string()
