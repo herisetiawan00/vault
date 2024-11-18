@@ -8,9 +8,9 @@ pub fn trigger_action() -> () {
     let args = get_arguments();
 
     match get_action().as_str() {
-        "encrypt" => encrypt::encrypt_file(args),
-        "decrypt" => decrypt::decrypt_file(args),
-        "help" => help::documentation(),
+        "encrypt" | "e" => encrypt::encrypt_file(args),
+        "decrypt" | "d" => decrypt::decrypt_file(args),
+        "help" | "h" => help::documentation(),
         _ => {
             println!("Invalid given parameter(s)");
             help::documentation();
