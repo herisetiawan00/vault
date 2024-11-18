@@ -1,7 +1,7 @@
 use super::key::key_generator;
 
-pub fn encryptor(input: &[u8]) -> (Vec<u8>, Vec<u8>) {
-    let key_length = 10;
+pub fn encryptor(input: Vec<u8>) -> (Vec<u8>, Vec<u8>) {
+    let key_length = 12 * 8;
     let keys = key_generator(key_length);
     let mut rest = input.to_vec();
     let mut result: Vec<u8> = vec![];
@@ -21,7 +21,7 @@ pub fn encryptor(input: &[u8]) -> (Vec<u8>, Vec<u8>) {
     (result, keys)
 }
 
-pub fn decryptor(input: &[u8], keys: &[u8]) -> Vec<u8> {
+pub fn decryptor(input: Vec<u8>, keys: Vec<u8>) -> Vec<u8> {
     let mut rest = input.to_vec();
     let mut result: Vec<u8> = vec![];
     let mut index: usize = 1;
@@ -30,8 +30,8 @@ pub fn decryptor(input: &[u8], keys: &[u8]) -> Vec<u8> {
         let position = keys[index];
 
         match position {
-            0 => result.push(rest.remove(0)),
             1 => result.push(rest.pop().unwrap()),
+            0 => result.push(rest.remove(0)),
             _ => {}
         }
 
