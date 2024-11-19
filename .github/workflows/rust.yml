@@ -1,7 +1,9 @@
-name: Rust CI/CD
+name: Rust
 
 on:
   push:
+    branches: [ "main" ]
+  pull_request:
     branches: [ "main" ]
 
 env:
@@ -9,61 +11,12 @@ env:
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      # Install Rust
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-
-      # Build the project
-      - name: Build
-        run: cargo build --verbose
-
-      # Run tests
-      - name: Run tests
-        run: cargo test --verbose
-
-  release:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-      
-      # Install Rust
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-      
-      # Install cargo-release
-      - name: Install cargo-release
-        run: cargo install cargo-release
-
-      # Configure GitHub token for tagging
-      - name: Setup GitHub Token
-        run: echo "::add-mask::${{ secrets.GITHUB_TOKEN }}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
-      # Perform version bump and tagging
-      - name: Bump Version and Tag
-        run: cargo release patch --execute
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # Create GitHub Release
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          body_path: CHANGELOG.md
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+    - uses: actions/checkout@v4
+    - name: Build
+      run: cargo build --verbose
+    - name: Run tests
+      run: cargo test --verbose

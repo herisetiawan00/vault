@@ -5,6 +5,3 @@ edition = "2021"
 
 [dependencies]
 rand = "0.8.5"
-
-[package.metadata.release]
-tag-name = "v{{version}}"
