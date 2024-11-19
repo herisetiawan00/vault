@@ -1,7 +1,9 @@
 use std::{collections::BTreeMap, process};
 
+use rpassword::read_password;
+
 use crate::utils::{
-    bits::bits_to_bytes,
+    bits::{bits_to_bytes, bytes_to_bits},
     encrypt::encryptor,
     file::{get_file_stem_name, read_file_as_bits, write_to_file_recursively},
 };
@@ -20,7 +22,22 @@ pub fn encrypt_file(args: BTreeMap<String, String>) -> () {
 
     let file_bits = read_file_as_bits(file_path.to_string());
 
-    let (encrypted, keys) = encryptor(file_bits);
+    println!("Enter your passkey (press enter to make it empty)");
+    let passkey = match read_password() {
+        Ok(passkey) => bytes_to_bits(passkey.as_bytes().to_vec()),
+        Err(_) => Vec::new(),
+    };
+
+    let (encrypted, mut keys) = encryptor(file_bits, None);
+
+    match passkey.len() {
+        0 => {}
+        _ => {
+            let (encrypted_keys, _) = encryptor(keys, Some(passkey));
+            keys = encrypted_keys;
+        }
+    }
+
     let encrypted_bytes: Vec<u8> = bits_to_bytes(encrypted.to_vec());
     let keys_bytes = bits_to_bytes(keys.to_vec());
 
