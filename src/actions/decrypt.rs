@@ -29,10 +29,15 @@ pub fn decrypt_file(args: BTreeMap<String, String>) -> () {
     let file_bits = read_file_as_bits(file_path.to_string());
     let mut keys_bits = read_file_as_bits(keys_path.to_string());
 
-    println!("Enter your passkey (press enter to make it empty)");
-    let passkey = match read_password() {
-        Ok(passkey) => bytes_to_bits(passkey.as_bytes().to_vec()),
-        Err(_) => Vec::new(),
+    let passkey: Vec<u8> = match args.get("passkey") {
+        Some(value) => bytes_to_bits(value.as_bytes().to_vec()),
+        None => {
+            println!("Enter your passkey (press enter to make it empty)");
+            match read_password() {
+                Ok(passkey) => bytes_to_bits(passkey.as_bytes().to_vec()),
+                Err(_) => Vec::new(),
+            }
+        }
     };
 
     match passkey.len() {
