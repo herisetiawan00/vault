@@ -8,4 +8,3 @@ rand = "0.8.5"
 
 [package.metadata.release]
 tag-name = "v{{version}}"
-changelog = true
