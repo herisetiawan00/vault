@@ -24,7 +24,7 @@ vault [command] [...params]
 * Rust (cargo)
 
 ## Installation
-* install (rustup)[https://doc.rust-lang.org/cargo/getting-started/installation.html]
+* install [rustup](https://doc.rust-lang.org/cargo/getting-started/installation.html)
 * clone this repo
 ```bash
 git clone https://github.com/herisetiawan00/vault.git
