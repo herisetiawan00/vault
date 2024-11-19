@@ -7,6 +7,10 @@ Vault is using symmetric encryption, so it will generate pair of encrypted file 
 * Can be use in CI/CD
 * Multi security layer (key and passkey)
 
+## Concept
+![vault-concept](https://github.com/herisetiawan00/vault/blob/main/doc/assets/vault-concept.png)
+
+
 ## Usages
 ```bash
 vault [command] [...params]
