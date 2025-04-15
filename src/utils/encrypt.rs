@@ -1,9 +1,13 @@
 use std::process;
 
-use super::{bits::bytes_to_bits, key::key_generator};
+use super::key::key_generator;
 
-pub fn encryptor(input: Vec<u8>, custom_keys: Option<Vec<u8>>) -> (Vec<u8>, Vec<u8>) {
-    let key_length = 12 * 8;
+pub fn encryptor(
+    input: Vec<u8>,
+    custom_keys: Option<Vec<u8>>,
+    length: Option<u32>,
+) -> (Vec<u8>, Vec<u8>) {
+    let key_length: u32 = length.unwrap_or(1024 * 8);
     let keys = match custom_keys {
         Some(value) => value,
         None => key_generator(key_length),
