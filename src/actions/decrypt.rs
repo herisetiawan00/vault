@@ -43,12 +43,12 @@ pub fn decrypt_file(args: BTreeMap<String, String>) -> () {
     match passkey.len() {
         0 => {}
         _ => {
-            let decrypted_keys = decryptor(keys_bits, passkey);
+            let decrypted_keys = decryptor(keys_bits, passkey, false);
             keys_bits = decrypted_keys;
         }
     };
 
-    let decrypted_bits = decryptor(file_bits, keys_bits);
+    let decrypted_bits = decryptor(file_bits, keys_bits, true);
     let decrypted_bytes = bits_to_bytes(decrypted_bits);
 
     match output_path {

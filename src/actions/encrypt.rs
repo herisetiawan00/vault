@@ -62,12 +62,12 @@ pub fn encrypt_file(args: BTreeMap<String, String>) -> () {
         None => None,
     };
 
-    let (encrypted, mut keys) = encryptor(file_bits, None, length);
+    let (encrypted, mut keys) = encryptor(file_bits, None, length, true);
 
     match passkey.len() {
         0 => {}
         _ => {
-            let (encrypted_keys, _) = encryptor(keys, Some(passkey), length);
+            let (encrypted_keys, _) = encryptor(keys, Some(passkey), length, false);
             keys = encrypted_keys;
         }
     }

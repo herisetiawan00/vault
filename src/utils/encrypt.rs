@@ -1,3 +1,4 @@
+use std::io::{self, Write};
 use std::process;
 
 use super::key::key_generator;
@@ -6,6 +7,7 @@ pub fn encryptor(
     input: Vec<u8>,
     custom_keys: Option<Vec<u8>>,
     length: Option<u32>,
+    show_progress: bool,
 ) -> (Vec<u8>, Vec<u8>) {
     let key_length: u32 = length.unwrap_or(1024 * 8);
     let keys = match custom_keys {
@@ -15,6 +17,9 @@ pub fn encryptor(
 
     let mut rest = input.to_vec();
     let mut result: Vec<u8> = vec![];
+
+    let total = rest.len();
+    let mut processed = 0;
 
     while rest.len() > 0 {
         let index = rest.len() % keys.len();
@@ -26,15 +31,29 @@ pub fn encryptor(
             1 => result.push(value),
             _ => {}
         }
+
+        processed += 1;
+        if show_progress {
+            if processed % 1000 == 0 || rest.is_empty() {
+                let percent = (processed * 100) / total.max(1);
+                print!("\rEncrypting: {:>3}%", percent);
+                io::stdout().flush().unwrap();
+            }
+        }
     }
+
+    println!();
 
     (result, keys)
 }
 
-pub fn decryptor(input: Vec<u8>, keys: Vec<u8>) -> Vec<u8> {
+pub fn decryptor(input: Vec<u8>, keys: Vec<u8>, show_progress: bool) -> Vec<u8> {
     let mut rest = input.to_vec();
     let mut result: Vec<u8> = vec![];
     let mut index: usize = 1;
+
+    let total = rest.len();
+    let mut processed = 0;
 
     while rest.len() > 0 {
         let position = keys[index];
@@ -64,7 +83,18 @@ pub fn decryptor(input: Vec<u8>, keys: Vec<u8>) -> Vec<u8> {
         } else {
             index += 1;
         }
+
+        processed += 1;
+        if show_progress {
+            if processed % 1000 == 0 || rest.is_empty() {
+                let percent = (processed * 100) / total.max(1);
+                print!("\rDecrypting: {:>3}%", percent);
+                io::stdout().flush().unwrap();
+            }
+        }
     }
+
+    println!();
 
     result
 }
